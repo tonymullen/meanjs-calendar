@@ -65,8 +65,6 @@ exports.update = function (req, res) {
  */
 exports.delete = function (req, res) {
   var calEvent = req.calEvent;
-  console.log("trying to delete");
-  //console.log(req.body);
   calEvent.remove(function (err) {
     if (err) {
       return res.status(400).send({

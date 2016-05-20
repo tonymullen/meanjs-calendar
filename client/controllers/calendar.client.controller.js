@@ -56,10 +56,7 @@
     */
 
     vm.alertOnEventClick = function(date, jsEvent, view) {
-      console.log(date);
-      console.log(date.start.format('YYYY-MM-DD'));
       vm.alertMessage = (date.title + ' was clicked ');
-      console.log(vm.alertMessage);
     };
 
     /* The function called when a day is clicked */
@@ -155,7 +152,6 @@
       database just by calling newEvent.$save().
       */
       newEvent.$save(function(data) {
-        console.log(data);
         newEvent._id = data._id;
         vm.calEvents.push(newEvent);
         vm.setCustomInds();
