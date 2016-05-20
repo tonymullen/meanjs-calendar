@@ -1,0 +1,39 @@
+
+<div class="container">
+
+<section>
+  <div class="page-header">
+    <h1>Calendar</h1>
+  </div>
+  <div class="well">
+      <div class="row">
+          <div class="col-sm-4">
+              <div class="btn-group calTools">
+                <button type="button" class="btn btn-primary" ng-click="vm.addEvent()">
+                  Add Event
+                </button>
+              </div>
+<p>
+              <ul class="list-unstyled">
+                  <li ng-repeat="e in vm.calEvents">
+                      <div class="alert alert-info">
+                          <a class="close" ng-click="vm.remove(e.customIndex)"><i class="glyphicon glyphicon-remove"></i></a>
+                          <b> <input ng-model="e.title"></b>
+                          <br>
+                          {{e.start | date:"MMM dd"}} - {{e.end | date:"MMM dd"}}
+                      </div>
+                  </li>
+              </ul>
+          </div>
+          <div class="col-sm-8">
+              <div ui-calendar="vm.uiConfig.calendar" class="calendar" ng-model="vm.eventSources"></div>
+          </div>
+      </div>
+  </div>
+
+<!--
+  <div ui-calendar="vm.uiConfig.calendar" class="span8 calendar" ng-model="vm.eventSources"></div>
+
+-->
+</section>
+</div>

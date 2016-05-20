@@ -1,0 +1,53 @@
+(function () {
+  'use strict';
+
+  angular
+    .module('cal-events')
+    .controller('CalEventsController', CalEventsController);
+
+  CalEventsController.$inject = ['$scope', '$state', 'calEventResolve', '$window', 'Authentication'];
+
+  function CalEventsController($scope, $state, calEvent, $window, Authentication) {
+    var vm = this;
+
+
+    vm.calEvent = calEvent;
+    vm.authentication = Authentication;
+    vm.error = null;
+    vm.form = {};
+    vm.remove = remove;
+    vm.save = save;
+
+    // Remove existing Article
+    function remove() {
+      if ($window.confirm('Are you sure you want to delete?')) {
+        vm.calEvent.$remove($state.go('calEvents.list'));
+      }
+    }
+
+    // Save Article
+    function save(isValid) {
+      if (!isValid) {
+        $scope.$broadcast('show-errors-check-validity', 'vm.form.eventForm');
+        return false;
+      }
+
+      // TODO: move create/update logic to service
+      if (vm.calEvent._id) {
+        vm.calEvent.$update(successCallback, errorCallback);
+      } else {
+        vm.calEvent.$save(successCallback, errorCallback);
+      }
+
+      function successCallback(res) {
+        $state.go('calEvents.view', {
+          calEventId: res._id
+        });
+      }
+
+      function errorCallback(res) {
+        vm.error = res.data.message;
+      }
+    }
+  }
+}());
