@@ -10,9 +10,9 @@ The simplest way to install the module is to download the .zip file, unzip the d
 
 * [Angular UI Calendar](https://github.com/angular-ui/ui-calendar)
 
-(This includes dependencies to jQuery, [Moment.js](http://momentjs.com/docs/) [FullCalendar.io](http://fullcalendar.io/download/)))
+(This includes dependencies to jQuery, [Moment.js](http://momentjs.com/docs/), and  [FullCalendar.io](http://fullcalendar.io/download/)))
 
 Install these with Bower using `bower install --save` to ensure they get added to your `bower.json` file.
 
 
-As with other dependencies we've seen in Mean.js, you should *not* place the script tags in the HTML by hand. This is handled automatically if your dependency paths are correctly added to `/config/assets/default.js`. Look at that file closely to understand how dependencies are added there. In addition to adding the required `.js` files, you'll also need to be sure the `fullcalendar.css` stylesheet is included under the `css` dependencies in that file. 
+As with other dependencies we've seen in Mean.js, you should *not* place the script tags in the HTML by hand. This is handled automatically if your dependency paths are correctly added to `/config/assets/default.js`. Look at that file closely to understand how dependencies are added there. In addition to adding the required `.js` files, you'll also need to be sure the `fullcalendar.css` stylesheet is included under the `css` dependencies in that file.
