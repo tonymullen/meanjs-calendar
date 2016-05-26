@@ -5,55 +5,40 @@
     .module('calendar')
     .controller('CalendarController', CalendarController);
 
-  CalendarController.$inject = ['CalendarService', '$compile', '$resource'];
+/*
+Here are the dependency injections for this controller. CalendarService is the service defined in this module. This will create new calendar event resources when we add new events. Authentication holds onto information about whether the user is logged in. We'll use this information in the view to decide what to display and what not to display, so we want to attach it to the model here in the controller.
+*/
+  CalendarController.$inject = ['CalendarService', 'Authentication'];
 
-  function CalendarController(CalendarService, $compile, $resource) {
+  function CalendarController(CalendarService, Authentication) {
 
     var vm = this;
 
+    // attach Authentication data to the model. See the view for how vm.authentication is used.
+    vm.authentication = Authentication;
+
+    /*
+    the service returns a $resource object. The .query function queries the database for
+    a collection of events. The function here executes when the query completes, and runs the
+    setCustomInds function.
+    */
     vm.calEvents = CalendarService.query(function() {
       vm.setCustomInds();
+
     });
 
 /*
-    vm.eventSources = [
-      {
-        url: "http://www.google.com/calendar/feeds/usa__en%40holiday.calendar.google.com/public/basic",
-        className: 'gcal-event',           // an option!
-        currentTimezone: 'America/Chicago' // an option!
-      }
-    ];
-*/
-
     vm.date = new Date();
     var d = vm.date.getDate();
     var m = vm.date.getMonth();
     var y = vm.date.getFullYear();
     vm.selectedDate = vm.date;
-    // vm.events = [];
-    /*
-    vm.events = [
-      { title: 'All Day Event', start: new Date(y, m, 1) },
-      { title: 'Long Event', start: new Date(y, m, d - 5), end: new Date(y, m, d - 2) },
-      { id: 999, title: 'Repeating Event', start: new Date(y, m, d - 3, 16, 0), allDay: false },
-      { id: 999, title: 'Repeating Event', start: new Date(y, m, d + 4, 16, 0), allDay: false },
-      { title: 'Birthday Party', start: new Date(y, m, d + 1, 19, 0), end: new Date(y, m, d + 1, 22, 30), allDay: false },
-      { title: 'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/' }
-    ];
-    for (var i = 0; i < vm.events.length; i++) {
-      vm.events[i].customIndex = i;
-    }
-
-    vm.calEventsExt = {
-      color: '#f00',
-      textColor: 'yellow',
-      events: [
-        { type: 'party', title: 'Lunch', start: new Date(y, m, d, 12, 0), end: new Date(y, m, d, 14, 0), allDay: false },
-        { type: 'party', title: 'Lunch 2', start: new Date(y, m, d, 12, 0), end: new Date(y, m, d, 14, 0), allDay: false },
-        { type: 'party', title: 'Click for Google', start: new Date(y, m, 28), end: new Date(y, m, 29), url: 'http://google.com/' }
-      ]
-    };
-    */
+*/
+    vm.date = moment().local();
+    var d = vm.date.date();
+    var m = vm.date.month();
+    var y = vm.date.year();
+    vm.selectedDate = vm.date;
 
     vm.alertOnEventClick = function(date, jsEvent, view) {
       vm.alertMessage = (date.title + ' was clicked ');
@@ -62,24 +47,24 @@
     /* The function called when a day is clicked */
     vm.alertOnDayClick = function(clickedDate, jsEvent, view) { // clickedDate is a moment.js object
       /*
-          The following lines of code handle selecting a date and highlighting the selected date.
-          This is an example of directly manipulating the DOM with jQuery. The $() function
-          is a jQuery function for grabbing DOM elements by their class values. The
-          .removeClass and .addClass methods remove or add a class value to the DOM element,
-          which is styled by CSS. The styling for the "select-highlight" class can be found
-          in this module's .css file, which can be found in client/css/calendar.css. (Note that this
-          .css file is loaded into the web page automatically by /config/assets/default.js)
+      The following lines of code handle selecting a date and highlighting the selected date.
+      This is an example of directly manipulating the DOM with jQuery. The $() function
+      is a jQuery function for grabbing DOM elements by their class values. The
+      .removeClass and .addClass methods remove or add a class value to the DOM element,
+      which is styled by CSS. The styling for the "select-highlight" class can be found
+      in this module's .css file, which can be found in client/css/calendar.css. (Note that this
+      .css file is loaded into the web page automatically by /config/assets/default.js)
 
-          Directly manipulating the DOM in this way is not generally recommended when working with
-          Angular.js. The preferred way would be to handle DOM manipulation in a directive, rather
-          than here in the controller. However, in this case, the Angular UI calendar directive doesn't
-          have this built in and I would prefer to keep my own changes in this module, rather than
-          editing a third-party directive or library.
+      Directly manipulating the DOM in this way is not generally recommended when working with
+      Angular.js. The preferred way would be to handle DOM manipulation in a directive, rather
+      than here in the controller. However, in this case, the Angular UI calendar directive doesn't
+      have this built in and I would prefer to keep my own changes in this module, rather than
+      editing a third-party directive or library.
       */
       $(".select-highlight").removeClass("select-highlight");
       if (JSON.stringify(vm.selectedDate) !== JSON.stringify(clickedDate)) {
         $("td[data-date=" + clickedDate.format('YYYY-MM-DD') + "]").addClass("select-highlight");
-        vm.selectedDate = clickedDate.format('YYYY-MM-DD');
+        vm.selectedDate = clickedDate;
       } else {
         vm.selectedDate = vm.date;
       }
@@ -106,15 +91,8 @@
       });
     };
 
-    vm.eventRender = function(event, element, view) {
-      element.attr({ 'tooltip': event.title,
-                    'tooltip-append-to-body': true });
-      $compile(element)(vm);
-    };
-
     /* add custom event*/
     vm.addEvent = function() {
-
       /*
       We could just create a new event like the newEvent object below, using fullcalendar
       format. However, this wouldn't allow us to take advantage of Angular.js
@@ -126,45 +104,57 @@
       PUT requests manually).
 
       var newEvent = {
-        title: 'Open Sesame',
+        title: 'Coffee Break',
         start: vm.selectedDate,
         end: vm.selectedDate,
-        className: ['openSesame'],
+        className: ['coffeeBreak'],
         customIndex: vm.events.length
       }
-      */
 
-      /*
-      Instead of the above, we'll create a $resource object and then give it all
-      the attributes that will make it a valid fullcalendar event object. Check out
-      the CalendarService() Angular service to see how this is created, which
-      you'll find in /client/services/calendar.client.service.js
+      Instead of the above, we'll let our service create a $resource object and
+      then give it all the attributes that will make it a valid fullcalendar
+      event object. Check out the CalendarService() Angular service to see
+      how this is created, which you'll find in /client/services/calendar.client.service.js
       */
       var newEvent = new CalendarService();
-      newEvent.title = 'Open Sesame';
-      newEvent.start = vm.selectedDate;
-      newEvent.end = vm.selectedDate;
-      newEvent.className = ['openSesame'];
+      newEvent.title = 'Coffee Break';
+      newEvent.start = vm.selectedDate.local();
+      newEvent.end = vm.selectedDate.local();
+      newEvent.className = ['coffeeBreak'];
+
       /*
       Because the newEvent object is a $resource object that is defined with the
       appropriate api URL for http requests, it's got $resource methods such as
-      $save() and $update() built in. So now it's super simple to save it to the
-      database just by calling newEvent.$save().
+      $save() and $update() built in. So now it's very simple to save it to the
+      database just by calling newEvent.$save(). The $resource object handles all
+      the http request business for you.
       */
       newEvent.$save(function(data) {
         newEvent._id = data._id;
         vm.calEvents.push(newEvent);
         vm.setCustomInds();
-        console.log(newEvent);
       });
     };
 
     vm.selectedDateEvents = function(ev) {
-      return moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate;
+      // console.log(moment(ev.start).format('YYYY-MM-DD'));
+      // console.log(vm.selectedDate.format('YYYY-MM-DD'));
+      // console.log(moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD'))
+      // return moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD');
+      return true;
     };
 
+    /*
+    this associates a custom "index" value for each element in the list of events. The
+    index corresponds to the array index of the event. The reason this is used is that if
+    the original list is filtered in the view, the resulting filtered list will have different
+    indices. customIndex always refers to the index in the original array. This must be called
+    any time elements are added to or deleted from vm.calEvents.
+    */
     vm.setCustomInds = function() {
       for (var i = 0; i < vm.calEvents.length; i++) {
+        console.log("The ith: " + i);
+        console.log(vm.calEvents[i].start);
         vm.calEvents[i].customIndex = i;
       }
     };
@@ -181,14 +171,15 @@
         dayClick: vm.alertOnDayClick,
         eventClick: vm.alertOnEventClick,
         eventDrop: vm.alertOnDrop,
-        eventResize: vm.alertOnResize,
-        eventRender: vm.eventRender
+        eventResize: vm.alertOnResize
       }
     };
 
-    // vm.eventSources = [vm.events, vm.calEventsExt];
+    /*
+    Various event sources can be combined. See the Angular-UI-Calendar demo
+    for an example of how to combine locally-stored events with a collection of
+    events drawn from Google Calendar.
+    */
     vm.eventSources = [vm.calEvents];
-
-
   }
 }());

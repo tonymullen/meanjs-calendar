@@ -9,16 +9,22 @@
       <div class="row">
           <div class="col-sm-4">
               <div class="btn-group calTools">
-                <button type="button" class="btn btn-primary" ng-click="vm.addEvent()">
+                <!-- vm.authentication.user is true if the user is properly logged in.-->
+                <button type="button" class="btn btn-primary" ng-click="vm.addEvent()" ng-show="vm.authentication.user">
                   Add Event
                 </button>
+                <div ng-hide="vm.authentication.user">
+                  Create an account and log in to add or delete events
+                </div>
               </div>
 <p>
               <ul class="list-unstyled">
-                  <li ng-repeat="e in vm.calEvents">
+                  <li ng-repeat="e in vm.calEvents | filter:vm.selectedDateEvents">
                       <div class="alert alert-info">
-                          <a class="close" ng-click="vm.remove(e.customIndex)"><i class="glyphicon glyphicon-remove"></i></a>
-                          <b> <input ng-model="e.title"></b>
+                          <b> <input ng-model="e.title" class="eventtext"></b>
+
+                          <a class="close" ng-click="vm.remove(e.customIndex)" ng-show="vm.authentication.user"><i class="glyphicon glyphicon-remove"></i></a>
+
                           <br>
                           {{e.start | date:"MMM dd"}} - {{e.end | date:"MMM dd"}}
                       </div>
