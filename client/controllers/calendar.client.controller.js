@@ -8,9 +8,9 @@
 /*
 Here are the dependency injections for this controller. CalendarService is the service defined in this module. This will create new calendar event resources when we add new events. Authentication holds onto information about whether the user is logged in. We'll use this information in the view to decide what to display and what not to display, so we want to attach it to the model here in the controller.
 */
-  CalendarController.$inject = ['CalendarService', 'Authentication', '$compile'];
+  CalendarController.$inject = ['CalendarService', 'Authentication'];
 
-  function CalendarController(CalendarService, Authentication, $compile) {
+  function CalendarController(CalendarService, Authentication) {
 
     var vm = this;
 
@@ -76,6 +76,7 @@ Here are the dependency injections for this controller. CalendarService is the s
     vm.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view) {
       vm.alertMessage = ('Event Dropped to make dayDelta ' + delta);
       console.log(vm.alertMessage);
+      console.log(event);
     };
 
     /* alert on Resize */
@@ -91,12 +92,9 @@ Here are the dependency injections for this controller. CalendarService is the s
       });
     };
 
-    /* Render Tooltip */
-    vm.eventRender = function(event, element, view) {
-      element.attr({ 'tooltip': event.title,
-      'tooltip-append-to-body': true });
-      $compile(element)(vm);
-    };
+    vm.update = function(event) {
+      event.$update();
+    }
 
     /* add custom event*/
     vm.addEvent = function() {
@@ -123,6 +121,7 @@ Here are the dependency injections for this controller. CalendarService is the s
       event object. Check out the CalendarService() Angular service to see
       how this is created, which you'll find in /client/services/calendar.client.service.js
       */
+
       var newEvent = new CalendarService();
       newEvent.title = 'Coffee Break';
       newEvent.start = vm.selectedDate.local();
@@ -145,11 +144,9 @@ Here are the dependency injections for this controller. CalendarService is the s
     };
 
     vm.selectedDateEvents = function(ev) {
-      // console.log(moment(ev.start).format('YYYY-MM-DD'));
-      // console.log(vm.selectedDate.format('YYYY-MM-DD'));
-      // console.log(moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD'))
+      // returns true if the date of the event matches the selected date.
+      // use as filter for the ng-repeat in the view
       return moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD');
-      // return true;
     };
 
     /*

@@ -21,7 +21,7 @@
               <ul class="list-unstyled">
                   <li ng-repeat="e in vm.calEvents | filter:vm.selectedDateEvents">
                       <div class="alert alert-info">
-                          <b> <input ng-model="e.title" class="eventtext"></b>
+                          <b> <input ng-model="e.title" class="eventtext" ng-change="vm.update(e)"></b>
 
                           <a class="close" ng-click="vm.remove(e.customIndex)" ng-show="vm.authentication.user"><i class="glyphicon glyphicon-remove"></i></a>
 
