@@ -69,20 +69,16 @@ Here are the dependency injections for this controller. CalendarService is the s
         vm.selectedDate = vm.date;
       }
       vm.alertMessage = (clickedDate.format("MMM D") + ' day was clicked ');
-      console.log(vm.alertMessage);
     };
 
     /* alert on Drop */
     vm.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view) {
       vm.alertMessage = ('Event Dropped to make dayDelta ' + delta);
-      console.log(vm.alertMessage);
-      console.log(event);
     };
 
     /* alert on Resize */
     vm.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view) {
       vm.alertMessage = ('Event Resized to make dayDelta ' + delta);
-      console.log(vm.alertMessage);
     };
 
     vm.remove = function(index) {
@@ -92,9 +88,10 @@ Here are the dependency injections for this controller. CalendarService is the s
       });
     };
 
+    /* called when the title changes in the view */
     vm.update = function(event) {
       event.$update();
-    }
+    };
 
     /* add custom event*/
     vm.addEvent = function() {
@@ -158,8 +155,6 @@ Here are the dependency injections for this controller. CalendarService is the s
     */
     vm.setCustomInds = function() {
       for (var i = 0; i < vm.calEvents.length; i++) {
-        console.log("The ith: " + i);
-        console.log(vm.calEvents[i].start);
         vm.calEvents[i].customIndex = i;
       }
     };
