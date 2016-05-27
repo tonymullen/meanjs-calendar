@@ -33,6 +33,7 @@ var CalEventSchema = new Schema({
   allDay: Boolean,
   start: Date,
   end: Date,
+  stick: { type: Boolean, default: true },
   user: {
     type: Schema.ObjectId,
     ref: 'User'

@@ -8,9 +8,9 @@
 /*
 Here are the dependency injections for this controller. CalendarService is the service defined in this module. This will create new calendar event resources when we add new events. Authentication holds onto information about whether the user is logged in. We'll use this information in the view to decide what to display and what not to display, so we want to attach it to the model here in the controller.
 */
-  CalendarController.$inject = ['CalendarService', 'Authentication'];
+  CalendarController.$inject = ['CalendarService', 'Authentication', '$compile'];
 
-  function CalendarController(CalendarService, Authentication) {
+  function CalendarController(CalendarService, Authentication, $compile) {
 
     var vm = this;
 
@@ -91,6 +91,13 @@ Here are the dependency injections for this controller. CalendarService is the s
       });
     };
 
+    /* Render Tooltip */
+    vm.eventRender = function(event, element, view) {
+      element.attr({ 'tooltip': event.title,
+      'tooltip-append-to-body': true });
+      $compile(element)(vm);
+    };
+
     /* add custom event*/
     vm.addEvent = function() {
       /*
@@ -121,6 +128,7 @@ Here are the dependency injections for this controller. CalendarService is the s
       newEvent.start = vm.selectedDate.local();
       newEvent.end = vm.selectedDate.local();
       newEvent.className = ['coffeeBreak'];
+      newEvent.stick = true;
 
       /*
       Because the newEvent object is a $resource object that is defined with the
@@ -140,8 +148,8 @@ Here are the dependency injections for this controller. CalendarService is the s
       // console.log(moment(ev.start).format('YYYY-MM-DD'));
       // console.log(vm.selectedDate.format('YYYY-MM-DD'));
       // console.log(moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD'))
-      // return moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD');
-      return true;
+      return moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD');
+      // return true;
     };
 
     /*
@@ -171,7 +179,8 @@ Here are the dependency injections for this controller. CalendarService is the s
         dayClick: vm.alertOnDayClick,
         eventClick: vm.alertOnEventClick,
         eventDrop: vm.alertOnDrop,
-        eventResize: vm.alertOnResize
+        eventResize: vm.alertOnResize,
+        eventRender: vm.eventRender
       }
     };
 
