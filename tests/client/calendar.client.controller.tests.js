@@ -1,15 +1,16 @@
 (function () {
   'use strict';
 
-  describe('Articles List Controller Tests', function () {
+  describe('Calendar Controller Tests', function () {
     // Initialize global variables
-    var ArticlesListController,
+    var CalendarController,
       $scope,
       $httpBackend,
       $state,
       Authentication,
-      ArticlesService,
-      mockArticle;
+      CalendarService,
+      mockCalEvent0,
+      mockCalEvent1;
 
     // The $resource service augments the response object with methods for updating and deleting the resource.
     // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
@@ -36,7 +37,7 @@
     // The injector ignores leading and trailing underscores here (i.e. _$httpBackend_).
     // This allows us to inject a service but then attach it to a variable
     // with the same name as the service.
-    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _ArticlesService_) {
+    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _CalendarService_) {
       // Set a new global scope
       $scope = $rootScope.$new();
 
@@ -44,13 +45,27 @@
       $httpBackend = _$httpBackend_;
       $state = _$state_;
       Authentication = _Authentication_;
-      ArticlesService = _ArticlesService_;
+      CalendarService = _CalendarService_;
 
-      // create mock article
-      mockArticle = new ArticlesService({
+      // create mock calendar events
+      mockCalEvent0 = new CalendarService({
         _id: '525a8422f6d0f87f0e407a33',
-        title: 'An Article about MEAN',
-        content: 'MEAN rocks!'
+        title: 'Coffee Break',
+        start: moment().local(),
+        end: moment().local(),
+        className: ['coffeeBreak'],
+        stick: true,
+        customIndex: 0
+      });
+
+      mockCalEvent1 = new CalendarService({
+        _id: '525a8422f6d0f87f0e407a34',
+        title: 'Coffee Break',
+        start: moment().local(),
+        end: moment().local(),
+        className: ['coffeeBreak'],
+        stick: true,
+        customIndex: 1
       });
 
       // Mock logged in user
@@ -58,8 +73,8 @@
         roles: ['user']
       };
 
-      // Initialize the Articles List controller.
-      ArticlesListController = $controller('ArticlesListController as vm', {
+      // Initialize the calendar controller.
+      CalendarController = $controller('CalendarController as vm', {
         $scope: $scope
       });
 
@@ -68,23 +83,22 @@
     }));
 
     describe('Instantiate', function () {
-      var mockArticleList;
+      var mockCalEventList;
 
       beforeEach(function () {
-        mockArticleList = [mockArticle, mockArticle];
+        mockCalEventList = [mockCalEvent0, mockCalEvent1];
       });
 
-      it('should send a GET request and return all articles', inject(function (ArticlesService) {
-        // Set POST response
-        $httpBackend.expectGET('api/articles').respond(mockArticleList);
-
+      it('should send a GET request and return all events', inject(function (CalendarService) {
+        // Set GET response
+        $httpBackend.expectGET('api/calendar').respond(mockCalEventList);
 
         $httpBackend.flush();
 
-        // Test form inputs are reset
-        expect($scope.vm.articles.length).toEqual(2);
-        expect($scope.vm.articles[0]).toEqual(mockArticle);
-        expect($scope.vm.articles[1]).toEqual(mockArticle);
+        // compare resulting values
+        expect($scope.vm.calEvents.length).toEqual(2);
+        expect($scope.vm.calEvents[0]).toEqual(mockCalEvent0);
+        expect($scope.vm.calEvents[1]).toEqual(mockCalEvent1);
 
       }));
     });

@@ -22,9 +22,8 @@ Here are the dependency injections for this controller. CalendarService is the s
     a collection of events. The function here executes when the query completes, and runs the
     setCustomInds function.
     */
-    vm.calEvents = CalendarService.query(function() {
-      vm.setCustomInds();
-
+    vm.calEvents = CalendarService.query(function(evs) {
+      vm.setCustomInds(evs);
     });
 
 /*
@@ -51,7 +50,7 @@ Here are the dependency injections for this controller. CalendarService is the s
       This is an example of directly manipulating the DOM with jQuery. The $() function
       is a jQuery function for grabbing DOM elements by their class values. The
       .removeClass and .addClass methods remove or add a class value to the DOM element,
-      which is styled by CSS. The styling for the "select-highlight" class can be found
+      which is styled by CSS. The styling for the 'select-highlight' class can be found
       in this module's .css file, which can be found in client/css/calendar.css. (Note that this
       .css file is loaded into the web page automatically by /config/assets/default.js)
 
@@ -61,14 +60,14 @@ Here are the dependency injections for this controller. CalendarService is the s
       have this built in and I would prefer to keep my own changes in this module, rather than
       editing a third-party directive or library.
       */
-      $(".select-highlight").removeClass("select-highlight");
+      $('.select-highlight').removeClass('select-highlight');
       if (JSON.stringify(vm.selectedDate) !== JSON.stringify(clickedDate)) {
-        $("td[data-date=" + clickedDate.format('YYYY-MM-DD') + "]").addClass("select-highlight");
+        $('td[data-date=' + clickedDate.format('YYYY-MM-DD') + ']').addClass('select-highlight');
         vm.selectedDate = clickedDate;
       } else {
         vm.selectedDate = vm.date;
       }
-      vm.alertMessage = (clickedDate.format("MMM D") + ' day was clicked ');
+      vm.alertMessage = (clickedDate.format('MMM D') + ' day was clicked ');
     };
 
     /* alert on Drop */
@@ -84,7 +83,7 @@ Here are the dependency injections for this controller. CalendarService is the s
     vm.remove = function(index) {
       vm.calEvents[index].$remove(function() {
         vm.calEvents.splice(index, 1);
-        vm.setCustomInds();
+        vm.setCustomInds(vm.calEvents);
       });
     };
 
@@ -119,12 +118,20 @@ Here are the dependency injections for this controller. CalendarService is the s
       how this is created, which you'll find in /client/services/calendar.client.service.js
       */
 
-      var newEvent = new CalendarService();
+      var newEvent = new CalendarService({
+        title: 'Coffee Break',
+        start: vm.selectedDate.local(),
+        end: vm.selectedDate.local(),
+        className: ['coffeeBreak'],
+        stick: true
+      });
+      /*
       newEvent.title = 'Coffee Break';
       newEvent.start = vm.selectedDate.local();
       newEvent.end = vm.selectedDate.local();
       newEvent.className = ['coffeeBreak'];
       newEvent.stick = true;
+      */
 
       /*
       Because the newEvent object is a $resource object that is defined with the
@@ -136,7 +143,7 @@ Here are the dependency injections for this controller. CalendarService is the s
       newEvent.$save(function(data) {
         newEvent._id = data._id;
         vm.calEvents.push(newEvent);
-        vm.setCustomInds();
+        vm.setCustomInds(vm.calEvents);
       });
     };
 
@@ -147,15 +154,15 @@ Here are the dependency injections for this controller. CalendarService is the s
     };
 
     /*
-    this associates a custom "index" value for each element in the list of events. The
+    this associates a custom 'index' value for each element in the list of events. The
     index corresponds to the array index of the event. The reason this is used is that if
     the original list is filtered in the view, the resulting filtered list will have different
     indices. customIndex always refers to the index in the original array. This must be called
     any time elements are added to or deleted from vm.calEvents.
     */
-    vm.setCustomInds = function() {
-      for (var i = 0; i < vm.calEvents.length; i++) {
-        vm.calEvents[i].customIndex = i;
+    vm.setCustomInds = function(evs) {
+      for (var i = 0; i < evs.length; i++) {
+        evs[i].customIndex = i;
       }
     };
 
