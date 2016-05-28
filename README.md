@@ -16,3 +16,8 @@ Install these with Bower using `bower install --save` to ensure they get added t
 
 
 As with other dependencies we've seen in Mean.js, you should *not* place the script tags in the HTML by hand. This is handled automatically if your dependency paths are correctly added to `/config/assets/default.js`. Look at that file closely to understand how dependencies are added there. In addition to adding the required `.js` files, you'll also need to be sure the `fullcalendar.css` stylesheet is included under the `css` dependencies in that file.
+
+
+## Demo
+
+A demo of the module in the standard Mean.JS template app can be seen [here](https://boiling-thicket-12784.herokuapp.com/). In order to add or delete events you'll need to either create an account or log in with login name `tester` and password `Test12345!`.
