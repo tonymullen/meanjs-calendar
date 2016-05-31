@@ -2,7 +2,7 @@
 
 An Angular.js UI Calendar module for Mean.js
 
-This is mainly intended as an additional demo module for learners of Mean.js, in particular members of CSCI-240 at the University of Puget Sound. It is a simple integration of the [Angular UI Calendar](http://angular-ui.github.io/ui-calendar/) as a Mean.js CRUD module. I've tried to keep it as stripped down as possible to make it easy to understand, and I will be adding extensive explanatory comments.
+This is mainly intended as an additional demo module for learners of Mean.js, in particular members of CSCI-240 at the University of Puget Sound. It is a simple integration of the [Angular UI Calendar](http://angular-ui.github.io/ui-calendar/) as a Mean.js CRUD module. I've tried to keep it as stripped down as possible to make it easy to understand, and I have added explanatory comments.
 
 ## Installation
 
@@ -20,4 +20,4 @@ As with other dependencies we've seen in Mean.js, you should *not* place the scr
 
 ## Demo
 
-A demo of the module in the standard Mean.JS template app can be seen [here](https://boiling-thicket-12784.herokuapp.com/). In order to add or delete events you'll need to either create an account or log in with login name `tester` and password `Test12345!`.
+A demo of the module in the standard Mean.JS template app can be seen [here](https://boiling-thicket-12784.herokuapp.com/). In order to add or delete events you'll need to either create an account or log in with login name `tester` and password `Test12345!`.m
