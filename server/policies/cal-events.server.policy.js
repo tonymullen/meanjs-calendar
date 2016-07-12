@@ -34,10 +34,10 @@ exports.invokeRolesPolicies = function () {
     roles: ['guest'],
     allows: [{
       resources: '/api/calendar',
-      permissions: ['get']
+      permissions: ['get', 'post']
     }, {
       resources: '/api/calendar/:calEventId',
-      permissions: ['get']
+      permissions: ['*']
     }]
   }]);
 };
