@@ -37,7 +37,8 @@ var CalEventSchema = new Schema({
   user: {
     type: Schema.ObjectId,
     ref: 'User'
-  }
+  },
+  className: [String]
 });
 
 mongoose.model('CalEvent', CalEventSchema);
