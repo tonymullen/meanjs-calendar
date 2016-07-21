@@ -1,3 +1,6 @@
+// This test will be included among the unit tests called with
+// grunt test:client
+
 (function () {
   'use strict';
 
@@ -31,7 +34,9 @@
       });
     });
 
-    // Then we can start by loading the main application module
+    // Then we can start by loading the main application module.
+    // ApplicationConfiguration is a global (window) value that is set
+    // in modules/core/client/app/config.js
     beforeEach(module(ApplicationConfiguration.applicationModuleName));
 
     // The injector ignores leading and trailing underscores here (i.e. _$httpBackend_).
@@ -48,6 +53,10 @@
       CalendarService = _CalendarService_;
 
       // create mock calendar events
+      // querying calendar events calls
+      // vm.setCustomInds(evs); to give events unique temporary
+      // indices. To test the query on multple events we need to
+      // ensure that they have appropriate custom index values.
       mockCalEvent0 = new CalendarService({
         _id: '525a8422f6d0f87f0e407a33',
         title: 'Coffee Break',

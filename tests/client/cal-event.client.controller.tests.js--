@@ -1,15 +1,15 @@
 (function () {
   'use strict';
 
-  describe('Articles Controller Tests', function () {
+  describe('Calendar Events Controller Tests', function () {
     // Initialize global variables
-    var ArticlesController,
+    var CalendarController,
       $scope,
       $httpBackend,
       $state,
       Authentication,
-      ArticlesService,
-      mockArticle;
+      CalendarService,
+      mockCalEvent;
 
     // The $resource service augments the response object with methods for updating and deleting the resource.
     // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
@@ -36,7 +36,7 @@
     // The injector ignores leading and trailing underscores here (i.e. _$httpBackend_).
     // This allows us to inject a service but then attach it to a variable
     // with the same name as the service.
-    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _ArticlesService_) {
+    beforeEach(inject(function ($controller, $rootScope, _$state_, _$httpBackend_, _Authentication_, _CalendarService_) {
       // Set a new global scope
       $scope = $rootScope.$new();
 
@@ -44,13 +44,17 @@
       $httpBackend = _$httpBackend_;
       $state = _$state_;
       Authentication = _Authentication_;
-      ArticlesService = _ArticlesService_;
+      CalendarService = _CalendarService_;
 
-      // create mock article
-      mockArticle = new ArticlesService({
+      // create mock calendar event
+      mockCalEvent = new CalendarService({
         _id: '525a8422f6d0f87f0e407a33',
-        title: 'An Article about MEAN',
-        content: 'MEAN rocks!'
+        title: 'Coffee Break',
+        start: moment().local(),
+        end: moment().local(),
+        className: ['coffeeBreak'],
+        stick: true,
+        customIndex: 0
       });
 
       // Mock logged in user
@@ -58,10 +62,9 @@
         roles: ['user']
       };
 
-      // Initialize the Articles controller.
-      ArticlesController = $controller('ArticlesController as vm', {
-        $scope: $scope,
-        articleResolve: {}
+      // Initialize the Calendar controller.
+      CalendarController = $controller('CalendarController as vm', {
+        $scope: $scope
       });
 
       // Spy on state go
@@ -69,35 +72,35 @@
     }));
 
     describe('vm.save() as create', function () {
-      var sampleArticlePostData;
+      var sampleCalEventPostData;
 
       beforeEach(function () {
-        // Create a sample article object
-        sampleArticlePostData = new ArticlesService({
-          title: 'An Article about MEAN',
-          content: 'MEAN rocks!'
+        // Create a sample event object
+        sampleCalEventPostData = new CalendarService({
+          title: 'Coffee Break',
+          start: moment().local(),
+          end: moment().local(),
+          className: ['coffeeBreak'],
+          stick: true,
+          customIndex: 0
         });
 
-        $scope.vm.article = sampleArticlePostData;
+        $scope.vm.calEvents[0] = sampleCalEventPostData;
       });
 
-      it('should send a POST request with the form input values and then locate to new object URL', inject(function (ArticlesService) {
+      it('should send a POST request with the form input values and then locate to new object URL', inject(function (CalendarService) {
         // Set POST response
-        $httpBackend.expectPOST('api/articles', sampleArticlePostData).respond(mockArticle);
+        $httpBackend.expectPOST('api/calendar', sampleCalEventPostData).respond(mockCalEvent);
 
         // Run controller functionality
         $scope.vm.save(true);
         $httpBackend.flush();
 
-        // Test URL redirection after the article was created
-        expect($state.go).toHaveBeenCalledWith('articles.view', {
-          articleId: mockArticle._id
-        });
       }));
 
       it('should set $scope.vm.error if error', function () {
         var errorMessage = 'this is an error message';
-        $httpBackend.expectPOST('api/articles', sampleArticlePostData).respond(400, {
+        $httpBackend.expectPOST('api/calendar', sampleCalEventPostData).respond(400, {
           message: errorMessage
         });
 
@@ -110,27 +113,23 @@
 
     describe('vm.save() as update', function () {
       beforeEach(function () {
-        // Mock article in $scope
-        $scope.vm.article = mockArticle;
+        // Mock event in $scope
+        $scope.vm.calEvents[0] = mockCalEvent;
       });
 
-      it('should update a valid article', inject(function (ArticlesService) {
+      it('should update a valid calendar event', inject(function (CalendarService) {
         // Set PUT response
-        $httpBackend.expectPUT(/api\/articles\/([0-9a-fA-F]{24})$/).respond();
+        $httpBackend.expectPUT(/api\/calendar\/([0-9a-fA-F]{24})$/).respond();
 
         // Run controller functionality
         $scope.vm.save(true);
         $httpBackend.flush();
 
-        // Test URL location to new object
-        expect($state.go).toHaveBeenCalledWith('articles.view', {
-          articleId: mockArticle._id
-        });
       }));
 
-      it('should set $scope.vm.error if error', inject(function (ArticlesService) {
+      it('should set $scope.vm.error if error', inject(function (CalendarService) {
         var errorMessage = 'error';
-        $httpBackend.expectPUT(/api\/articles\/([0-9a-fA-F]{24})$/).respond(400, {
+        $httpBackend.expectPUT(/api\/calendar\/([0-9a-fA-F]{24})$/).respond(400, {
           message: errorMessage
         });
 
@@ -143,30 +142,18 @@
 
     describe('vm.remove()', function () {
       beforeEach(function () {
-        // Setup articles
-        $scope.vm.article = mockArticle;
+        // Setup calendar events
+        $scope.vm.calEvents[0] = mockCalEvent;
       });
 
-      it('should delete the article and redirect to articles', function () {
-        // Return true on confirm message
-        spyOn(window, 'confirm').and.returnValue(true);
+      it('should delete the calendar event', function () {
 
-        $httpBackend.expectDELETE(/api\/articles\/([0-9a-fA-F]{24})$/).respond(204);
+        $httpBackend.expectDELETE(/api\/calendar\/([0-9a-fA-F]{24})$/).respond(204);
 
         $scope.vm.remove();
         $httpBackend.flush();
-
-        expect($state.go).toHaveBeenCalledWith('articles.list');
       });
 
-      it('should should not delete the article and not redirect', function () {
-        // Return false on confirm message
-        spyOn(window, 'confirm').and.returnValue(false);
-
-        $scope.vm.remove();
-
-        expect($state.go).not.toHaveBeenCalled();
-      });
     });
   });
 }());
