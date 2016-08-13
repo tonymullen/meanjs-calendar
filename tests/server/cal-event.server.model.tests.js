@@ -6,18 +6,18 @@
 var should = require('should'),
   mongoose = require('mongoose'),
   User = mongoose.model('User'),
-  Article = mongoose.model('Article');
+  CalEvent = mongoose.model('CalEvent');
 
 /**
  * Globals
  */
 var user,
-  article;
+  calEvent;
 
 /**
  * Unit tests
  */
-describe('Article Model Unit Tests:', function () {
+describe('CalEvent Model Unit Tests:', function () {
 
   beforeEach(function (done) {
     user = new User({
@@ -30,9 +30,8 @@ describe('Article Model Unit Tests:', function () {
     });
 
     user.save(function () {
-      article = new Article({
-        title: 'Article Title',
-        content: 'Article Content',
+      calEvent = new CalEvent({
+        title: 'Calendar Event',
         user: user
       });
 
@@ -43,16 +42,16 @@ describe('Article Model Unit Tests:', function () {
   describe('Method Save', function () {
     it('should be able to save without problems', function (done) {
       this.timeout(10000);
-      return article.save(function (err) {
+      return calEvent.save(function (err) {
         should.not.exist(err);
         done();
       });
     });
 
     it('should be able to show an error when try to save without title', function (done) {
-      article.title = '';
+      calEvent.title = '';
 
-      return article.save(function (err) {
+      return calEvent.save(function (err) {
         should.exist(err);
         done();
       });
@@ -60,7 +59,7 @@ describe('Article Model Unit Tests:', function () {
   });
 
   afterEach(function (done) {
-    Article.remove().exec(function () {
+    CalEvent.remove().exec(function () {
       User.remove().exec(done);
     });
   });

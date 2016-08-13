@@ -102,7 +102,7 @@ Here are the dependency injections for this controller. CalendarService is the s
       You'll see that it will still work fine for the UI calendar, but the $save()
       method won't be defined for it, so it won't be able to be saved to
       the database so simply (you'd have to set up the necesssary http POST or
-      PUT requests manually).
+      PUT requests manually, which in Angular you would do using the $http service).
 
       var newEvent = {
         title: 'Coffee Break',
@@ -125,27 +125,14 @@ Here are the dependency injections for this controller. CalendarService is the s
         className: ['coffeeBreak'],
         stick: true
       });
-      /*
-      newEvent.title = 'Coffee Break';
-      newEvent.start = vm.selectedDate.local();
-      newEvent.end = vm.selectedDate.local();
-      newEvent.className = ['coffeeBreak'];
-      newEvent.stick = true;
-      */
 
-      /*
-      Because the newEvent object is a $resource object that is defined with the
-      appropriate api URL for http requests, it's got $resource methods such as
-      $save() and $update() built in. So now it's very simple to save it to the
-      database just by calling newEvent.$save(). The $resource object handles all
-      the http request business for you.
-      */
       newEvent.$save(function(data) {
         newEvent._id = data._id;
         vm.calEvents.push(newEvent);
         vm.setCustomInds(vm.calEvents);
       });
     };
+
 
     vm.selectedDateEvents = function(ev) {
       // returns true if the date of the event matches the selected date.
