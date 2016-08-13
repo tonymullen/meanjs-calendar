@@ -20,4 +20,4 @@ As with other dependencies we've seen in Mean.js, you should *not* place the scr
 
 ## Demo
 
-A demo of the module in the standard Mean.JS template app can be seen [here](https://boiling-thicket-12784.herokuapp.com/). In order to add or delete events you'll need to either create an account or log in with login name `tester` and password `Test12345!`.
+A demo of the module in the standard Mean.JS template app can be seen [here](https://boiling-thicket-12784.herokuapp.com/). You can add or delete public events without logging in. It is also possible to create an account or log in with login name `tester` and password `Test12345!`.
