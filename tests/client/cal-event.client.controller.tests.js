@@ -74,8 +74,12 @@
     describe('vm.addEvent()', function () {
 
       it('should send a POST request with the form input values', inject(function (CalendarService) {
+        // $httpBackend is an angular object that lets us fake an http server behavior.
+        // we can make http requests to this objects and it will act like a web server
+        // for testing purposes
 
-        // This handles a phantom get request that arises during testing
+        // This handles a GET request made by uicalendar. We're not testing for this,
+        // but we need to consume it in order to test the POST response below
         $httpBackend.whenGET('api/calendar').respond(function(method, url, data, headers) {
           return [409, 'response body', {}, 'TestPhrase'];
         });
@@ -101,7 +105,7 @@
 
       it('should update a valid calendar event', inject(function (CalendarService) {
 
-        // This handles a phantom get request that arises during testing
+        // See comment above about the extra GET request
         $httpBackend.whenGET('api/calendar').respond(function(method, url, data, headers) {
           return [409, 'response body', {}, 'TestPhrase'];
         });
@@ -124,7 +128,7 @@
 
       it('should delete the calendar event', function () {
 
-        // This handles a phantom get request that arises during testing
+        // See comment above about the extra GET request
         $httpBackend.whenGET('api/calendar').respond(function(method, url, data, headers) {
           return [409, 'response body', {}, 'TestPhrase'];
         });
