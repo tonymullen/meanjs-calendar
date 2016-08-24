@@ -103,7 +103,11 @@ describe('CalEvent CRUD tests', function () {
       });
   });
 
-  it('should be able to save a public calendar event if not logged in', function (done) {
+// Remove this test case and uncomment the two cases commented out below.
+// Both tests are fully written and do not need to be modified.
+// They should fail when grunt test is run, and succeed when the functionality
+// has been correctly implemented.
+  it('should be able to save a calendar event if not logged in', function (done) {
     agent.post('/api/calendar')
       .send(calEvent)
       .expect(200)
@@ -115,6 +119,36 @@ describe('CalEvent CRUD tests', function () {
         done();
       });
   });
+
+/*
+  it('should be able to save a public calendar event if not logged in', function (done) {
+    calEvent.public = true;
+    agent.post('/api/calendar')
+      .send(calEvent)
+      .expect(200)
+      .end(function (calEventSaveErr, calEventSaveRes) {
+        // Call the assertion callback
+        if (calEventSaveErr) {
+          return done(calEventSaveErr);
+        }
+        done();
+      });
+  });
+
+  it('should not be able to save a private calendar event if not logged in', function (done) {
+    calEvent.public = false;
+    agent.post('/api/calendar')
+      .send(calEvent)
+      .expect(400)
+      .end(function (calEventSaveErr, calEventSaveRes) {
+        // Set message assertion
+        (calEventSaveRes.body.message).should.match('Must be logged in to save a private event');
+
+        // Handle article save error
+        done(calEventSaveErr);
+      });
+  });
+*/
 
   it('should not be able to save a calendar event if no title is provided', function (done) {
     // Invalidate title field
@@ -147,7 +181,7 @@ describe('CalEvent CRUD tests', function () {
   });
 
 
-  it('should be able to get a list of public calendar events if not signed in', function (done) {
+  it('should be able to get a list of calendar events if not signed in', function (done) {
     // Create new calendar event model instance
     var calEventObj = new CalEvent(calEvent);
 
@@ -166,7 +200,7 @@ describe('CalEvent CRUD tests', function () {
     });
   });
 
-  it('should be able to get a single public calendar event if not signed in', function (done) {
+  it('should be able to get a single calendar event if not signed in', function (done) {
     // Create new calendar event model instance
     var calEventObj = new CalEvent(calEvent);
 
@@ -183,19 +217,9 @@ describe('CalEvent CRUD tests', function () {
     });
   });
 
-  /*
-    // This needs to be modified to work properly. Currently the tests do not
-    // distinguish between public and private events
-    it('should not be able to save a private calendar event if not logged in', function (done) {
-      agent.post('/api/calendar')
-        .send(calEvent)
-        .expect(403)
-        .end(function (calEventSaveErr, calEventSaveRes) {
-          // Call the assertion callback
-          done(calEventSaveErr);
-        });
-    });
 
+// More tests for private/public event handling
+/*
     it('should be able to get a list of private calendar events if logged in', function (done) {
 
     });
