@@ -105,8 +105,8 @@ describe('CalEvent CRUD tests', function () {
 
 // Remove this test case and uncomment the two cases commented out below.
 // Both tests are fully written and do not need to be modified.
-// They should fail when grunt test is run, and succeed when the functionality
-// has been correctly implemented.
+// The first will succeed and the second should fail when grunt test is run,
+// and succeed when the functionality has been correctly implemented.
   it('should be able to save a calendar event if not logged in', function (done) {
     agent.post('/api/calendar')
       .send(calEvent)
@@ -139,7 +139,7 @@ describe('CalEvent CRUD tests', function () {
     calEvent.public = false;
     agent.post('/api/calendar')
       .send(calEvent)
-      .expect(400)
+      .expect(403)
       .end(function (calEventSaveErr, calEventSaveRes) {
         // Set message assertion
         (calEventSaveRes.body.message).should.match('Must be logged in to save a private event');
