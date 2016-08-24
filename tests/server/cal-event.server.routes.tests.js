@@ -71,7 +71,7 @@ describe('CalEvent CRUD tests', function () {
         // Get the userId
         var userId = user.id;
 
-        // Save a new article
+        // Save a new calEvent
         agent.post('/api/calendar')
           .send(calEvent)
           .expect(200)
@@ -144,7 +144,7 @@ describe('CalEvent CRUD tests', function () {
         // Set message assertion
         (calEventSaveRes.body.message).should.match('Must be logged in to save a private event');
 
-        // Handle article save error
+        // Handle calEvent save error
         done(calEventSaveErr);
       });
   });
@@ -166,7 +166,7 @@ describe('CalEvent CRUD tests', function () {
         // Get the userId
         var userId = user.id;
 
-        // Save a new article
+        // Save a new calEvent
         agent.post('/api/calendar')
           .send(calEvent)
           .expect(400)
@@ -174,7 +174,7 @@ describe('CalEvent CRUD tests', function () {
             // Set message assertion
             (calendarSaveRes.body.message).should.match('Title cannot be blank');
 
-            // Handle article save error
+            // Handle calEvent save error
             done(calendarSaveErr);
           });
       });
@@ -185,9 +185,9 @@ describe('CalEvent CRUD tests', function () {
     // Create new calendar event model instance
     var calEventObj = new CalEvent(calEvent);
 
-    // Save the article
+    // Save the calEvent
     calEventObj.save(function () {
-      // Request articles
+      // Request calEvents
       request(app).get('/api/calendar')
         .end(function (req, res) {
           // Set assertion
