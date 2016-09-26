@@ -16,13 +16,15 @@ The simplest way to install the dependencies is to edit your `bower.json` file, 
 
     "angular-ui-calendar": "^1.0.1"
 
-as the last entry of the `dependencies` object. Add
+as the last entry of the `dependencies` object.
+
+Then add
 
     "jquery": "latest",
 
-as the *first* entry of the `dependencies` object in the same file.
+as the *first* entry of the `dependencies` object in the same file. The order here is important. The jQuery entry *must* precede the Angular.js entry.
 
-Run
+Then run
 
      bower install
 
@@ -30,7 +32,7 @@ to install the dependencies, and then
 
      grunt build
 
-to have `wiredep` scan your `bower.json` file and add your dependency paths to `/config/assets/default.js`. In addition to the required `.js` paths, you should also see the `fullcalendar.css` included under the `css` dependencies in that file.
+to have `wiredep` scan your `bower.json` file and add your dependency paths to `/config/assets/default.js`. In addition to the required `.js` paths, you should also see `fullcalendar.css` included under the `css` dependencies in that file.
 
 ## Demo
 
