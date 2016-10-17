@@ -33,7 +33,7 @@ describe('CalEvent CRUD tests', function () {
   beforeEach(function (done) {
     // Create user credentials
     credentials = {
-      username: 'username',
+      usernameOrEmail: 'username',
       password: 'M3@n.jsI$Aw3$0m3'
     };
 
@@ -43,7 +43,7 @@ describe('CalEvent CRUD tests', function () {
       lastName: 'Name',
       displayName: 'Full Name',
       email: 'test@test.com',
-      username: credentials.username,
+      username: credentials.usernameOrEmail,
       password: credentials.password,
       provider: 'local'
     });
@@ -105,7 +105,7 @@ describe('CalEvent CRUD tests', function () {
 
 // Remove this test case and uncomment the two cases commented out below.
 // Both tests are fully written and do not need to be modified.
-// The first will succeed and the second should fail when grunt test is run,
+// The first will succeed and the second should fail when gulp test is run,
 // and succeed when the functionality has been correctly implemented.
   it('should be able to save a calendar event if not logged in', function (done) {
     agent.post('/api/calendar')

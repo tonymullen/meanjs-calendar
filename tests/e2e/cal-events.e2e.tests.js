@@ -1,7 +1,7 @@
 'use strict';
 
 // this test will be called with
-// grunt test:e2e
+// gulp test:e2e
 
 describe('Calendar E2E Tests:', function () {
   describe('Test calendar page', function () {
