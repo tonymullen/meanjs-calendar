@@ -36,4 +36,4 @@ to have `wiredep` scan your `bower.json` file and add your dependency paths to `
 
 ## Demo
 
-A demo of the module in the standard Mean.JS template app can be seen [here](https://boiling-thicket-12784.herokuapp.com/). You can add or delete public events without logging in. It is also possible to create an account or log in with login name `tester` and password `Test12345!`.
+A demo of the module in the standard Mean.JS template app can be seen [here](https://meanjs-with-calendar.herokuapp.com/). You can add or delete public events without logging in. It is also possible to create an account or log in with login name `tester` and password `Test12345!`.
