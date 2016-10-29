@@ -6,33 +6,81 @@ This is mainly intended as an additional demo module for learners of Mean.js, in
 
 ## Installation
 
-The simplest way to install the module is to download the .zip file, unzip the directory, and place it in your `modules` directory. You will also need to make sure that the following dependencies are installed:
+Download the `.zip` file from the [meanjs-calendar GitHub repo](https://github.com/tonymullen/meanjs-calendar). Don't clone the repo. Unzip the file and rename the directory from `meanjs-calendar-master` to `calendar`. Place the directory into the `modules` directory of your project alongside `articles`, `chat`, `core`, and `users`.
 
-* [Angular UI Calendar](https://github.com/angular-ui/ui-calendar)
+In order to ensure that the dependencies get properly installed, we need to add them to `bower.json` file. Starting at the end the `"dependencies"` object (line 18-19), add the `angular-ui-calendar` dependency, then modify the rest of the file as follows. Note the addition of `resolutions` and the modification of `overrides` to include jquery as a dependency of angular.:
 
-(This includes dependencies to jQuery, [Moment.js](http://momentjs.com/docs/), and  [FullCalendar.io](http://fullcalendar.io/download/))
+      "owasp-password-strength-test": "~1.3.0",
+      "angular-ui-calendar": "^1.0.1"
+      },
+      "resolutions": {
+       "angular": "1.5.8"
+      },
+      "overrides": {
+       "angular": {
+         "dependencies": {
+          "jquery": "*"
+         }
+       },
+       "bootstrap": {
+         "main": [
+           "dist/css/bootstrap.css",
+           "dist/css/bootstrap-theme.css",
+           "less/bootstrap.less"
+          ]
+        }
+      }
+    }
+<!-- .* -->
+Make sure all commas are where they belong (between object elements, but not after the last element of an object).
 
-The simplest way to install the dependencies is to edit your `bower.json` file, adding
+This should ensure that the correct version of Angular is installed to handle the various dependencies on it.
 
-    "angular-ui-calendar": "^1.0.1"
+Run
 
-as the last entry of the `dependencies` object.
+    bower install
 
-Then add
+to install all client dependencies.
 
-    "jquery": "latest",
+You can use `wiredep` to add the necessary dependencies to our assets file automatically. Modify line 444 in your `gulpfile.js` file to add the `wiredep` task to the default `gulp` task, like this:
 
-as the *first* entry of the `dependencies` object in the same file. The order here is important. The jQuery entry *must* precede the Angular.js entry.
+    // Run the project in development mode
+    gulp.task('default', function (done) {
+      runSequence('env:dev', ['copyLocalEnvConfig', 'makeUploadsDir'], 'wiredep', 'lint', ['nodemon', 'watch'], done);
+    });
 
-Then run
+Finally, run
 
-     bower install
+    gulp
 
-to install the dependencies, and then
+Check your project's `config/assets/default.js` file. The `css` and `js` assets arrays should look like this:
 
-     grunt build
-
-to have `wiredep` scan your `bower.json` file and add your dependency paths to `/config/assets/default.js`. In addition to the required `.js` paths, you should also see `fullcalendar.css` included under the `css` dependencies in that file.
+    css: [
+      // bower:css
+      'public/lib/bootstrap/dist/css/bootstrap.css',
+      'public/lib/bootstrap/dist/css/bootstrap-theme.css',
+      'public/lib/ng-img-crop/compile/minified/ng-img-crop.css',
+      'public/lib/fullcalendar/dist/fullcalendar.css',
+      // endbower
+    ],
+    js: [
+      // bower:js
+      'public/lib/jquery/dist/jquery.js',
+      'public/lib/angular/angular.js',
+      'public/lib/angular-animate/angular-animate.js',
+      'public/lib/angular-bootstrap/ui-bootstrap-tpls.js',
+      'public/lib/angular-messages/angular-messages.js',
+      'public/lib/angular-mocks/angular-mocks.js',
+      'public/lib/angular-resource/angular-resource.js',
+      'public/lib/angular-ui-router/release/angular-ui-router.js',
+      'public/lib/ng-file-upload/ng-file-upload.js',
+      'public/lib/ng-img-crop/compile/minified/ng-img-crop.js',
+      'public/lib/owasp-password-strength-test/owasp-password-strength-test.js',
+      'public/lib/moment/moment.js',
+      'public/lib/fullcalendar/dist/fullcalendar.js',
+      'public/lib/angular-ui-calendar/src/calendar.js',
+      // endbower
+    ],
 
 ## Demo
 
