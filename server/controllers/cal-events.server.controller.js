@@ -9,7 +9,7 @@ var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
- * Create an article
+ * Create an event
  */
 exports.create = function (req, res) {
   var calEvent = new CalEvent(req.body);
@@ -27,21 +27,20 @@ exports.create = function (req, res) {
 };
 
 /**
- * Show the current article
+ * Show the current event
  */
 exports.read = function (req, res) {
   // convert mongoose document to JSON
   var calEvent = req.calEvent ? req.calEvent.toJSON() : {};
 
   // Add a custom field to the event, for determining if the current User is the "owner".
-  // NOTE: This field is NOT persisted to the database, since it doesn't exist in the Article model.
   calEvent.isCurrentUserOwner = !!(req.user && calEvent.user && calEvent.user._id.toString() === req.user._id.toString());
 
   res.json(calEvent);
 };
 
 /**
- * Update an article
+ * Update an event
  */
 exports.update = function (req, res) {
   var calEvent = req.calEvent;
@@ -61,7 +60,7 @@ exports.update = function (req, res) {
 };
 
 /**
- * Delete an article
+ * Delete an event
  */
 exports.delete = function (req, res) {
   var calEvent = req.calEvent;
@@ -77,7 +76,7 @@ exports.delete = function (req, res) {
 };
 
 /**
- * List of Articles
+ * List of events
  */
 exports.list = function (req, res) {
   CalEvent.find().sort('-created').populate('user', 'displayName').exec(function (err, calEvents) {
@@ -92,7 +91,7 @@ exports.list = function (req, res) {
 };
 
 /**
- * Article middleware
+ * Event middleware
  */
 exports.calEventByID = function (req, res, next, id) {
 
