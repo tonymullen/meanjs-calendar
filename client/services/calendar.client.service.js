@@ -8,7 +8,7 @@
   CalendarService.$inject = ['$resource'];
 
   function CalendarService($resource) {
-    return $resource('api/calendar/:calEventId', {
+    return $resource('/api/calendar/:calEventId', {
       calEventId: '@_id'
     }, {
       update: {
