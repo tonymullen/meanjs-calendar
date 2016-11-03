@@ -103,7 +103,7 @@
 
       it('should send a GET request and return all events', inject(function (CalendarService) {
         // Set GET response
-        $httpBackend.expectGET('api/calendar').respond(mockCalEventList);
+        $httpBackend.expectGET('/api/calendar').respond(mockCalEventList);
 
         $httpBackend.flush();
 
