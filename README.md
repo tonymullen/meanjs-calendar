@@ -14,7 +14,7 @@ In order to ensure that the dependencies get properly installed, we need to add 
       "angular-ui-calendar": "^1.0.1"
       },
       "resolutions": {
-       "angular": "1.5.8"
+       "angular": "^1.5.8"
       },
       "overrides": {
        "angular": {
