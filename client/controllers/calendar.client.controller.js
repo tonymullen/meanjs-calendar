@@ -22,7 +22,7 @@ Here are the dependency injections for this controller. CalendarService is the s
     a collection of events. The function here executes when the query completes, and runs the
     setCustomInds function.
     */
-    vm.calEvents = CalendarService.query(function(evs) {
+    vm.calEvents = CalendarService.query(function (evs) {
       vm.setCustomInds(evs);
     });
 
@@ -39,12 +39,12 @@ Here are the dependency injections for this controller. CalendarService is the s
     var y = vm.date.year();
     vm.selectedDate = vm.date;
 
-    vm.alertOnEventClick = function(date, jsEvent, view) {
+    vm.alertOnEventClick = function (date, jsEvent, view) {
       vm.alertMessage = (date.title + ' was clicked ');
     };
 
     /* The function called when a day is clicked */
-    vm.alertOnDayClick = function(clickedDate, jsEvent, view) { // clickedDate is a moment.js object
+    vm.alertOnDayClick = function (clickedDate, jsEvent, view) { // clickedDate is a moment.js object
       /*
       The following lines of code handle selecting a date and highlighting the selected date.
       This is an example of directly manipulating the DOM with jQuery. The $() function
@@ -71,29 +71,29 @@ Here are the dependency injections for this controller. CalendarService is the s
     };
 
     /* alert on Drop */
-    vm.alertOnDrop = function(event, delta, revertFunc, jsEvent, ui, view) {
+    vm.alertOnDrop = function (event, delta, revertFunc, jsEvent, ui, view) {
       vm.alertMessage = ('Event Dropped to make dayDelta ' + delta);
     };
 
     /* alert on Resize */
-    vm.alertOnResize = function(event, delta, revertFunc, jsEvent, ui, view) {
+    vm.alertOnResize = function (event, delta, revertFunc, jsEvent, ui, view) {
       vm.alertMessage = ('Event Resized to make dayDelta ' + delta);
     };
 
-    vm.remove = function(index) {
-      vm.calEvents[index].$remove(function() {
+    vm.remove = function (index) {
+      vm.calEvents[index].$remove(function () {
         vm.calEvents.splice(index, 1);
         vm.setCustomInds(vm.calEvents);
       });
     };
 
     /* called when the title changes in the view */
-    vm.update = function(event) {
+    vm.update = function (event) {
       event.$update();
     };
 
     /* add custom event*/
-    vm.addEvent = function() {
+    vm.addEvent = function () {
       /*
       We could just create a new event like the newEvent object below, using fullcalendar
       format. However, this wouldn't allow us to take advantage of Angular.js
@@ -126,7 +126,7 @@ Here are the dependency injections for this controller. CalendarService is the s
         stick: true
       });
 
-      newEvent.$save(function(data) {
+      newEvent.$save(function (data) {
         newEvent._id = data._id;
         vm.calEvents.push(newEvent);
         vm.setCustomInds(vm.calEvents);
@@ -134,7 +134,7 @@ Here are the dependency injections for this controller. CalendarService is the s
     };
 
 
-    vm.selectedDateEvents = function(ev) {
+    vm.selectedDateEvents = function (ev) {
       // returns true if the date of the event matches the selected date.
       // use as filter for the ng-repeat in the view
       return moment(ev.start).format('YYYY-MM-DD') === vm.selectedDate.format('YYYY-MM-DD');
@@ -147,7 +147,7 @@ Here are the dependency injections for this controller. CalendarService is the s
     indices. customIndex always refers to the index in the original array. This must be called
     any time elements are added to or deleted from vm.calEvents.
     */
-    vm.setCustomInds = function(evs) {
+    vm.setCustomInds = function (evs) {
       for (var i = 0; i < evs.length; i++) {
         evs[i].customIndex = i;
       }
