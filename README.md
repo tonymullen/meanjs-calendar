@@ -46,7 +46,7 @@ If your shell reports that bower is not a command, it means that Bower still nee
 
     npm install bower -g
 
-You can use `wiredep` to add the necessary dependencies to our assets file automatically. Modify line 444 in your `gulpfile.js` file to add the `wiredep` task to the default `gulp` task, like this:
+You can use `wiredep` to add the necessary dependencies to our assets file automatically. Modify the default task in your `gulpfile.js` file to add the `wiredep` task to the default `gulp` task, like this (you should find the default task towards the bottom of the gulpfile):
 
     // Run the project in development mode
     gulp.task('default', function (done) {
